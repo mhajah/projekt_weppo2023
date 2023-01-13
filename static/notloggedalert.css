@@ -1,0 +1,13 @@
+.notlogged-alert {
+    background-color: #2a3a08;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Lato';
+}
+
+.notlogged-alert h3 {
+    margin: 0;
+}
