@@ -1,9 +1,35 @@
+var mssql = require('mssql');
+async function main() {
+    var conn = new mssql.ConnectionPool(
+        'server=localhost,1433;database=WEPPO;user id=weppo_sklep;password=weppo123');
+    try {
+        await conn.connect();
+        var request = new mssql.Request(conn);
+        var result = await request.query('select * from users');
+        result.recordset.forEach(r => {
+            console.log(`${r.ID} ${r.name}`);
+        })
+        await conn.close();
+    }
+    catch (err) {
+        if (conn.connected)
+            conn.close();
+        console.log(err);
+    }
+}
+main();
+
+
+/*
+//
+
 const http =       require("http")
 var express =      require("express");
 
 var app = express();
 
-//
+
+
 app.post('/', (req, res,next) => {
     const search_value = req.body.name;
     //make question to the SQL or sth...app
@@ -34,3 +60,5 @@ app.post('/', (req, res,next) => {
 
 
 });
+
+*/

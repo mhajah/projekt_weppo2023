@@ -29,7 +29,18 @@
             <h3>Witaj w naszym sklepie! Pamiętaj, żeby się zalogować lub założyć konto.</h3>
         </section>
         <section class="content">
-
+            <h2>Nasze produkty!</h2>
+            <span class="content-flowers">
+                <% for (var i=0;i<products.length;i++) { %>
+                    <div class="content-item">
+                        <img class ="content-item-img" src=<%=`${products[i].imgLink}` %> alt="123">
+                        <div class="content-description">
+                            <h5 class="content-item-h5"><%= products[i].name %></h5>
+                            <p class="content-item-p"><%= products[i].description %></p>
+                        </div>
+                    </div>
+                <% } %>
+            </span>
         </section>
 
     </main>

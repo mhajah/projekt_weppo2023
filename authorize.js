@@ -4,6 +4,7 @@
 * @param {http.ServerResponse} res
 * @param {*} next
 */
+
 function authorize(req, res, next) {
     if ( req.signedCookies.user ) {
         req.user = req.signedCookies.user;

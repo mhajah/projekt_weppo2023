@@ -2,6 +2,7 @@ var http = require('http');
 var authorize = require('./authorize')
 var express = require('express');
 var cookieParser = require('cookie-parser');
+var mssql = require('mssql');
 
 var app = express();
 app.use( express.static( "./static" ) );
@@ -13,9 +14,33 @@ app.set('views', './views');
 
 //w definicji obslugi sciezki wrzucamy middlewhare authorize i jesli on przepusci zadanie to req.user bedzie wypelniony wartoscia
 //jednoczesnie authorize jest straznikiem i jesli nie przepusci żądania, to pójdziemy do endpointa końcowego - login   
+productsTAB = [];
+    
+async function main() {       
+    var conn = new mssql.ConnectionPool(
+        'server=localhost,1433;database=WEPPO;user id=weppo_sklep;password=weppo123;Trusted_Connection=True;TrustServerCertificate=True;');
+    try {
+        await conn.connect();
+        var request = new mssql.Request(conn);
+        var result = await request.query('select * from products');
+        result.recordset.forEach(r => {
+            productsTAB.push({'name': r.name,'description':r.description,'imgLink': r.imgLink,'price':r.price});
+            console.log(productsTAB)
+        })
+        await conn.close();
+    }
+    catch (err) {
+        if (conn.connected)
+            conn.close();
+        console.log(err);
+    }
+}
+main();
 
 app.get('/', authorize, (req, res) => {
-    res.render('user', { user: req.user });
+    //res.render('user', {username: 'foo'});
+    res.render('user', { products: productsTAB });
+
 });
 
 app.get('/logout', authorize, (req, res) => {
@@ -29,6 +54,7 @@ app.get('/logout', authorize, (req, res) => {
 // strona logowania
 //endpoint ktorego zadaniem bedzie wydanie ciastka dla nowego uzytkownika
 app.get('/login', (req, res) => {
+    
     res.render('login');
 });
 app.post('/login', (req, res) => {
@@ -45,6 +71,7 @@ app.post('/login', (req, res) => {
         );
     }
 });
+
 
 http.createServer(app).listen(8080);
 console.log('serwer działa, nawiguj do http://localhost:8080');
