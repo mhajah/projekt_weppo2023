@@ -1,9 +1,94 @@
 body {
-    height: 100%;
     margin: 0;
-}
-form {
+    min-height: 100vh;
+    background:
+    linear-gradient(
+        rgb(116, 116, 116), 
+        rgb(58, 58, 58)
+      );
+    background-blend-mode: screen;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Lato';
+}
+
+.main-box {
+    height: 85vh;
+    width: 60vw;
+    background-color: white;
+    display: flex;
+}
+
+.main-box-left {
+    width: 55%;
+    background-color: #a4c4b5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    overflow: auto;
+}
+
+.main-box-left img {
+    height: 50%;
+}
+
+.main-box-left h5 {
+    font-size: 2.5vw;
+    margin: 10px 20px 0px 20px;
+}
+
+.main-box-left p {
+    font-size: 1.5vw;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-weight: 100;
+}
+
+.main-box-right {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#login div {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 5px 10px 5px;
+    align-items: center;
+}
+
+form input {
+    border: 0;
+    border-bottom: 1px solid rgb(223, 219, 219);
+    height: 40px;
+    width: 20vw;
+    font-size: 1vw;
+}
+
+form button {
+    border: 0;
+    background-color: rgb(46, 46, 46);
+    color: white;
+    width: 5vw;
+    height: 50px;
+    border-radius: 30px;
+}
+
+label {
+    margin-right: auto;
+    color:rgb(107, 107, 107)
+}
+
+input:focus {
+    outline: none;
+}
+
+.message {
+    color: red;
+    font-size: 24px;
 }

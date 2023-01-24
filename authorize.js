@@ -7,11 +7,17 @@
 
 function authorize(req, res, next) {
     if ( req.signedCookies.user ) {
-        req.user = req.signedCookies.user;
+        console.log(req.signedCookies.user) //nazwa uzytkownika
+        if(req.url=="/admin")
+            perm=checkpermission(req.signedCookies.user)
+            if(perm==1)
+                console.log("Nie dla pospolstwa administrowanie sklepem")
         next();
-    } else {
-        res.redirect('/login?returnUrl='+req.url);
-    }
-   }
+        } else {
+            console.log("REQ.URL: "+ (req.url))
+            res.redirect('/login?returnUrl='+req.url);
+        }
+        }
+           
 
 module.exports=authorize

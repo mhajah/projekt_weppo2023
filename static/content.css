@@ -38,21 +38,32 @@
     margin: 0;
     text-align: center;
     font-size: 0.5vw;
-    transition: 0.25;
+    overflow-y: hidden;
 }
 
 .content-item:hover .content-item-img,
 .content-item:hover .content-item-h5 {
     visibility: hidden;
 }
-.content-item:hover {
-    background-color: #c3fa96;
+
+.content-item-button {
+    margin: 10px;
+    padding: 10px;
+    display: none;
 }
-.content-item:hover .content-item-p {
+.content-item:hover .content-item-button {
     display: block;
-    margin-top: -100%;
+}
+
+.content-item:hover .content-item-p {
+    display: flex;
     font-size: 24px;
-    background-color: #c3fa96;
+    background-color: #77a612;
+}
+
+.content-item:hover .content-description {
+    margin-top: -100%;
+    height: 20vw;
 }
 
 .content-item img {
@@ -66,5 +77,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: 0.5s ease;
     height: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
 }

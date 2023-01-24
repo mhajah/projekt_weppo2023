@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <form method="POST">
+        <div id='login'>
+            <div>
+                Rejestracja
+            </div>
+            <div>
+                <input type='text' name='txtUser' />
+                <label>Nazwa użytkownika:</label>
+            </div>
+            <div>
+                <input type='password' name='txtPwd' />
+                <label>Hasło:</label>
+            </div>
+            <div>
+                <input type='password' name='repeattxtPWD' />
+                <label>Powtórz hasło:</label>
+            </div>
+            <div>
+                <button>Zarejestruj</button>
+            </div>
+            <% if ( locals.message ) { %>
+                <div class='message'>
+                    <%= locals.message %>
+                </div>
+                <% } %>
+        </div>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+1. Oddzielne widoki dla user, admin, niezalogowany
+2. Wyświetlanie zrealizowanych zamówień
+3. Dynamiczne dodawanie do bazy danych (w sensie bez konieczności resetu serwera)
+4. CSS dla rejestracji/logowania - 30 minut
+5. Formularz dla admina (do dodawania produktów) - godzina
+6. Logout - ~15 minut
+7. Dokończyć CSS dla koszyka - 10 minut

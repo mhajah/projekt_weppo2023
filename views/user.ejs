@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="topnav.css">
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="notloggedalert.css">
-    <link rel="stylesheet" href="content.css">
+    <link rel="stylesheet" href="/topnav.css">
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/notloggedalert.css">
+    <link rel="stylesheet" href="/content.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -16,13 +16,14 @@
 <body>
     <main>
         <section class="topnav">
-            <a class="active topnav-logo" href="#home">SH0P420</a>
+            <a class="active topnav-logo" href="/">SH0P420</a>
             <div class="topnav-rightside">
-                <form action="post" class="topnav-form">
-                    <input class="topnav-searchinput" type="text" placeholder="Wyszukaj produkt...">
+                <form action="/search/" class="topnav-form" method="post">
+                    <input class="topnav-searchinput" id="searchVal" name="searchVal" type="text" placeholder="Wyszukaj produkt..." value="">
                 </form>
-                <a class="active" href="#profile">Profile</a> <!--Here will be the name of the user. Now, there is a palaceholder.-->
-                <a class="active" href="#cart">Koszyk</a>
+                <a class="active" href="/login">Zaloguj</a> 
+                <a class="active" href="/cart">Koszyk</a>
+                <a class="active" href="/register">Rejestracja</a>
             </div>
         </section>
         <section class="notlogged-alert">
@@ -37,6 +38,9 @@
                         <div class="content-description">
                             <h5 class="content-item-h5"><%= products[i].name %></h5>
                             <p class="content-item-p"><%= products[i].description %></p>
+                            <form action='/cart/add/<%= products[i].name %>'>
+                                <button class="content-item-button" onclick="">Dodaj do koszyka</button>
+                            </form>
                         </div>
                     </div>
                 <% } %>

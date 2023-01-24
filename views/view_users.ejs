@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/topnav.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <section class="topnav">
+            <a class="active topnav-logo" href="/">SH0P420</a>
+            <div class="topnav-rightside">
+                <form action="/search/" class="topnav-form" method="post">
+                    <input class="topnav-searchinput" id="searchVal" name="searchVal" type="text" placeholder="Wyszukaj produkt..." value="">
+                </form>
+                <a class="active" href="/logout">Wyloguj</a>
+            </div>
+            </section>
+            <section>
+                <h2>Users</h2>
+                 <span class="Users">
+                    <% for (var i=0;i<users.length;i++) { %>
+                        <div>
+                            <div>
+                                 <p>Login: <%= users[i].name %>  Password: <%= users[i].password %> Permission: <%= users[i].perm %>
+                                 <form action='/view_users/remove/<%= users[i].name %>'>
+                                    <button onclick="">Usuń</button>
+                                 </form>
+                                </p>
+                                <!-- <p></p> -->
+                            </div>
+                        </div>
+                    <% } %>
+                </span>
+            </section>
+    </main>
+</body>

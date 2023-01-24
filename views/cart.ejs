@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/topnav.css">
+    <link rel="stylesheet" href="/cart.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <section class="topnav">
+            <a class="active topnav-logo" href="/">SH0P420</a>
+            <div class="topnav-rightside">
+                <form action="/search/" class="topnav-form" method="post">
+                    <input class="topnav-searchinput" id="searchVal" name="searchVal" type="text" placeholder="Wyszukaj produkt..." value="">
+                </form>
+                <a class="active" href="#profile">Profile</a> <!--Here will be the name of the user. Now, there is a palaceholder.-->
+                <a class="active" href="/cart">Koszyk</a>
+            </div>
+        </section>
+        <section class="cartItems">
+            <h2>Twój koszyk</h2>
+            <div class="cartItems-list">
+                <% var amount = 0; %>
+                <% for (var i=0;i<products.length;i++) { %>
+                    <li class="cartItems-list-li">
+                        <img class ="cartItems-list-li-img" src=<%=`${products[i].imgLink}` %> alt="123">
+                        <span>
+                            <p class="cartItems-list-li-name"><%= products[i].name %></p>
+                            <p class="cartItems-list-li-price"><%= products[i].price %>zł</p>
+                        </span>
+
+                    </li>
+                    <% amount += parseInt(products[i].price) %>
+                <% } %>                    
+                <p><b>Całkowity koszt koszyka:</b> <%= amount %>zł</p>
+    </section>
+    <section>
+    <section class="orderSummary">
+
+        <form method="POST" class="order-button">
+            <input type="text" name="totalPrice" class="unvisible" value="<%= amount %>">
+            <button >Złóż zamowienie</button></form>
+    </section>
+      
+    </main>
+</body>
+</html>

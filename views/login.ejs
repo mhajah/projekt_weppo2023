@@ -1,36 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <form method="POST">
-        <div id='login'>
-            <div>
-                Logowanie
-            </div>
-            <div>
-                <input type='text' name='txtUser' />
-                <label>Nazwa użytkownika:</label>
-            </div>
-            <div>
-                <input type='password' name='txtPwd' />
-                <label>Hasło:</label>
-            </div>
-            <div>
-                <button>Zaloguj</button>
-            </div>
-            <% if ( locals.message ) { %>
-                <div class='message'>
-                    <%= locals.message %>
+    <main class="main-box">
+        <section class="main-box-left">
+            <img src="img/flower.png" alt="">
+            <h5>Witaj w <bold>SH0P420</bold></h5>
+            <p>Zaloguj się, aby skorzystać z naszych usług! :)</p>
+        </section>
+        <section class="main-box-right">
+            <form method="POST">
+                <div id='login'>
+                    <div>
+                        Logowanie
+                    </div>
+                    <div>
+                        <label>Nazwa użytkownika</label>
+                        <input type='text' name='txtUser' />
+                        
+                    </div>
+                    <div>
+                        <label>Hasło</label>
+                        <input type='password' name='txtPwd' />
+                        
+                    </div>
+                    <div>
+                        <button>Zaloguj</button>
+                    </div>
+                    <% if ( locals.message ) { %>
+                        <div class='message'>
+                            <%= locals.message %>
+                        </div>
+                        <% } %>
                 </div>
-                <% } %>
-        </div>
-    </form>
+            </form>
+        </section>
+
+    </main>
 </body>
 
 </html>
