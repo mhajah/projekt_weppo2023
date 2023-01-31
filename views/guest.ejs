@@ -21,12 +21,12 @@
                 <form action="/search/" class="topnav-form" method="post">
                     <input class="topnav-searchinput" id="searchVal" name="searchVal" type="text" placeholder="Wyszukaj produkt..." value="">
                 </form>
-                <a class="active" href="/cart">Koszyk</a>
-                <a class="active" href="/logout">Wyloguj</a>
+                <a class="active" href="/login">Zaloguj</a> 
+                <a class="active" href="/register">Rejestracja</a>
             </div>
         </section>
         <section class="notlogged-alert">
-            <h3>Udanych zakupów! :)</h3>
+            <h3>Witaj w naszym sklepie! Pamiętaj, żeby się zalogować lub założyć konto.</h3>
         </section>
         <section class="content">
             <h2>Nasze produkty!</h2>
@@ -37,14 +37,12 @@
                         <div class="content-description">
                             <h5 class="content-item-h5"><%= products[i].name %></h5>
                             <p class="content-item-p"><%= products[i].description %></p>
-                            <form action='/cart/add/<%= products[i].name %>'>
-                                <button class="content-item-button" onclick="">Dodaj do koszyka</button>
-                            </form>
                         </div>
                     </div>
                 <% } %>
             </span>
         </section>
+
         <footer>
             Strona tworzona przez: Michał H. Adrian W. Jakub Ch.
         </footer>

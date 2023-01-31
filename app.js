@@ -1,5 +1,6 @@
 var http = require('http');
 //var authorize = require('./authorize')
+//dump database
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var mssql = require('mssql');
@@ -22,44 +23,32 @@ app.set('views', './views');
 
 //w definicji obslugi sciezki wrzucamy middlewhare authorize i jesli on przepusci zadanie to req.user bedzie wypelniony wartoscia
 //jednoczesnie authorize jest straznikiem i jesli nie przepusci żądania, to pójdziemy do endpointa końcowego - login   
-productsTAB = [];
-usersTAB=[];
-    
-async function main() {       
-    var conn = new mssql.ConnectionPool(
-        'server=localhost,1433;database=WEPPO;user id=weppo_sklep;password=weppo123;Trusted_Connection=True;TrustServerCertificate=True;');
+
+app.get('/', async (req, res) => {
+    let productsT;
     try {
-        await conn.connect();
-        var request = new mssql.Request(conn);
-        var result = await request.query('select * from products');
-        var result_users = await request.query('select * from users');
-        result.recordset.forEach(r => {
-            productsTAB.push({'name': r.name,'description':r.description,'imgLink': r.imgLink,'price':r.price});
-            console.log(productsTAB)
-        })
-        result_users.recordset.forEach(user => {
-            usersTAB.push({'name': user.name,'password':user.password,'perm': user.perm});
-            console.log(usersTAB)
-        })
-        await conn.close();
+        productsT = await database_handling.pullProductsFromDB();
+    } catch(e) {
+        console.error(e);
+        productsT = [];
     }
-    catch (err) {
-        if (conn.connected)
-            conn.close();
-        console.log(err);
-    }  
-}
 
-
-main();
-
-app.get('/',(req, res) => {
-    //res.render('user', {username: 'foo'});
-    res.render('user', { products: productsTAB });
+    if(!req.signedCookies.user) {
+        res.render('guest', { products: productsT });
+    } else {
+        res.render('user', { products: productsT });
+    }
 });
 
-app.get('/search/:name', (req, res) => {
-    const products_found = productsTAB.filter(product => 
+app.get('/search/:name', async (req, res) => {
+    let productsT;
+    try {
+        productsT = await database_handling.pullProductsFromDB();
+    } catch(e) {
+        console.error(e);
+        productsT = [];
+    }
+    const products_found = productsT.filter(product => 
         ((product.name).toLowerCase()).includes((req.params.name).toLowerCase()) || 
         ((product.description).toLowerCase()).includes((req.params.name).toLowerCase()) );
     res.render('user', { products: products_found });
@@ -88,17 +77,29 @@ app.get('/cart/add/:name', (req, res) => {
    res.redirect('/');
 });
 
-app.get('/view_users/remove/:name',(req,res) =>{
-    database_handling.delete_user_from_datebase(req.params.name);
-    function where_name(name){
-        if (name == req.params.name) return true;
-        return false;
+app.get('/view_users/remove/:name', async (req,res) => {
+    let usersT;
+    try {
+        usersT = await database_handling.pullUsersFromDB();
+    } catch(e) {
+        console.error(e);
+        usersT = [];
     }
-    usersTab = usersTAB.filter(where_name);
+    database_handling.delete_user_from_datebase(req.params.name);
+    console.log(req.params.name);
+    index = usersT.indexOf(req.params.name);
+    usersT.splice(index,1);
     res.redirect('/view_users');
 });
 
-app.get('/cart', (req, res) => {
+app.get('/cart', async (req, res) => {
+    let productsT;
+    try {
+        productsT = await database_handling.pullProductsFromDB();
+    } catch(e) {
+        console.error(e);
+        productsT = [];
+    }
     if (!req.cookies.cart) {
         res.render('cart', { products: [] });
     //powaiadom delikwenta zen ic nie ma wariacie 
@@ -106,7 +107,7 @@ app.get('/cart', (req, res) => {
         cartValues = req.cookies.cart;
         products_found=[]
         for (let i=0;i<cartValues.length;i++){
-             products_found.push(productsTAB.filter(product => ((product.name).toLowerCase()) == cartValues[i].toLowerCase())[0])
+             products_found.push(productsT.filter(product => ((product.name).toLowerCase()) == cartValues[i].toLowerCase())[0])
         }
         res.render('cart', { products: products_found });
         
@@ -120,19 +121,34 @@ app.get('/profile', authorize, (req, res) => {
 
 
 
-app.get('/logout', authorize, (req, res) => {
-    res.cookie('user', '', { maxAge: -1 });
-    res.redirect(returnUrl)
+app.get('/logout', (req, res) => {
+    res.cookie('user', '', {
+        maxAge: 0,
+        overwrite: true,
+      });
+    res.redirect('/');
 });
 
 app.get('/view_users',authorize, (req, res) => {
     //var answ = await database_handling.select_users();
-    var value = []
-    answ.recordset.forEach(r => {
-        value.push({'name': user.name,'password':user.password,'perm': user.perm});
-        console.log(value)
-    })
-    res.render('view_users', { users: value });
+   // var value = []
+    //querry = database_handling.select_users();
+    //querry.recordset.forEach(r => {
+     //   value.push({'name': user.name,'password':user.password,'perm': user.perm});
+     //   console.log(value)
+    //})
+    var answ = async () =>{
+        return database_handling.select_users();
+    }
+    console.log(answ());
+    var myTab = [];
+    //while(answ.recordset === undefined);
+    // answ.forEach(user => {
+    //     myTab.push({'name': user.name,'password':user.password,'perm': user.perm});
+    //     console.log(">>Pobieram uzytkownikow z bazy danych...")
+    // })
+    res.render('view_users', { users: myTab});
+    //res.render('view_users',{users: database_handling.pullUsersFromDB()});
 })
 
 
@@ -142,11 +158,21 @@ app.get('/view_users',authorize, (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
+
+    let usersT;
+    try {
+        usersT = await database_handling.pullUsersFromDB();
+    } catch(e) {
+        console.error(e);
+        usersT = [];
+    }
+
     var username = req.body.txtUser;
     var password = req.body.txtPwd;
-    for(i=0;i<usersTAB.length;i++){
-        if(usersTAB[i].name==username&& usersTAB[i].password==password){
+    var cipher = crypto.createCipher('aes-128-cbc','abcdefghijklmnop')
+    for(i=0;i<usersT.length;i++){
+        if(usersT[i].name==username&& usersT[i].password==password){
             let encryptedUsername = cipher.update(username, 'utf8', 'hex');
             encryptedUsername += cipher.final('hex');
             res.cookie('user',encryptedUsername,{signed:true});
@@ -185,6 +211,7 @@ app.post('/register', (req, res) => {
     }
     else{
         database_handling.insert_user(username,password,1);
+        //usersTAB.push({'name': username,'password':password,'perm': 1});
         res.redirect('/');
     }
 });
@@ -216,10 +243,18 @@ http.createServer(app).listen(8080);
 console.log('serwer działa, nawiguj do http://localhost:8080');
 
 
-function checkpermission(username){
-    for(i=0;i<usersTAB.length;i++)
-        if(usersTAB[i].name==username)
-            return usersTAB[i].perm   
+async function checkpermission(username){
+    let usersT;
+    try {
+        usersT = await database_handling.pullUsersFromDB();
+    } catch(e) {
+        console.error(e);
+        usersT = [];
+    }
+
+    for(i=0;i<usersT.length;i++)
+        if(usersT[i].name==username)
+            return usersT[i].perm   
     return 1;
 }
 
@@ -228,7 +263,8 @@ function authorize(req, res, next) {
         console.log(req.signedCookies.user) //nazwa uzytkownika
         if(req.url=="/admin"||"/view_users"){
             const encryptedUsername = req.signedCookies.user;
-            const decipher = crypto.createDecipher('aes256', secret);
+            const decipher = crypto.createDecipher('aes-128-cbc','abcdefghijklmnop');
+            //const decipher = crypto.createDecipher('aes256', secret);//var cipher = crypto.createCipher('aes-128-cbc','abcdefghijklmnop')
             let username = decipher.update(encryptedUsername, 'hex', 'utf8');
             username += decipher.final('utf8');
             if(checkpermission(username)!=2)
