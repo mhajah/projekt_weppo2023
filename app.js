@@ -182,18 +182,6 @@ app.post('/login', async (req, res) => {
     };
     res.render('login', { message: "Taki uzytkownik nie istnieje!" })
         
-    /*
-    if (username == password) {
-        // wydanie ciastka
-        res.cookie('user', username, { signed: true });
-        // przekierowanie
-        var returnUrl = req.query.returnUrl;
-        res.redirect(returnUrl);
-    } else {
-        res.render('login', { message: "Zła nazwa logowania lub hasło" }
-        );
-    }
-    */
 });
 
 
